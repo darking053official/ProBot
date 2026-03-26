@@ -847,3 +847,18 @@ client.on('messageCreate', async (message) => {
 
 // ========== BOTU BAŞLAT ==========
 client.login(BOT_TOKEN).catch(err => console.error('❌ Bot başlatılamadı:', err.message));
+
+// ========== RENDER İÇİN HTTP SUNUCU ==========
+const http = require('http');
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'application/json' });
+  res.end(JSON.stringify({ 
+    status: 'ok', 
+    bot: client.user?.username,
+    time: new Date().toISOString() 
+  }));
+});
+const PORT = process.env.PORT || 10000;
+server.listen(PORT, () => {
+  console.log(`✅ HTTP sunucusu ${PORT} portunda çalışıyor`);
+});
