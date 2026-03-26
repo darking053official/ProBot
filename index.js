@@ -1,5 +1,6 @@
 const { Client, GatewayIntentBits, Collection } = require('@jubbio/core');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
+const fetch = require('node-fetch');
 
 // ========== BOT AYARLARI ==========
 const client = new Client({
