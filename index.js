@@ -50,15 +50,6 @@ function kufurVar(mesaj) {
   return kufurListesi.some(kufur => msg.includes(kufur));
 }
 
-function kufurTemizle(mesaj) {
-  let yeniMesaj = mesaj;
-  kufurListesi.forEach(kufur => {
-    const regex = new RegExp(kufur, 'gi');
-    yeniMesaj = yeniMesaj.replace(regex, '***');
-  });
-  return yeniMesaj;
-}
-
 function xpEkle(kullaniciId) {
   if (!xpData.has(kullaniciId)) {
     xpData.set(kullaniciId, { xp: 0, level: 0 });
@@ -72,10 +63,6 @@ function xpEkle(kullaniciId) {
   }
   xpData.set(kullaniciId, data);
   return false;
-}
-
-function seviyeHesapla(xp) {
-  return Math.floor(xp / 100);
 }
 
 function coinEkle(kullaniciId, miktar) {
@@ -106,7 +93,7 @@ const marketUrunleri = [
   { id: 3, ad: 'Boost', fiyat: 200, aciklama: 'Sunucuya +1 boost' }
 ];
 
-// ========== KÜFÜR FİLTRESİ ==========
+// ========== MESAJ KOMUTLARI ==========
 client.on('messageCreate', async (message) => {
   if (message.author.bot) return;
   
@@ -306,8 +293,9 @@ client.on('messageCreate', async (message) => {
     if (isNaN(sure) || sure < 1) return message.reply('❌ Geçerli süre gir (saniye)!');
     await message.channel.setRateLimitPerUser(sure);
     await message.reply(`⏱️ Yavaş mod **${sure}** saniye olarak ayarlandı!`);
-}
-    // ========== OYUN KOMUTLARI ==========
+  }
+  
+  // ========== OYUN KOMUTLARI ==========
   else if (command === 'zar') {
     const zar1 = Math.floor(Math.random() * 6) + 1;
     const zar2 = Math.floor(Math.random() * 6) + 1;
@@ -329,9 +317,9 @@ client.on('messageCreate', async (message) => {
     const hedef = Math.floor(Math.random() * 100) + 1;
     let hak = 5;
     let tahminler = [];
-    const filter = m => m.author.id === message.author.id;
     await message.reply('🎯 **Sayı Tahmin Oyunu!**\n1-100 arasında bir sayı tuttum. 5 hakkın var. Tahminini yaz!');
     
+    const filter = m => m.author.id === message.author.id;
     const collector = message.channel.createMessageCollector({ filter, time: 60000 });
     collector.on('collect', async (m) => {
       const tahmin = parseInt(m.content);
@@ -351,7 +339,6 @@ client.on('messageCreate', async (message) => {
         m.reply(`${ipucu}. Kalan hak: ${hak}\nTahminlerin: ${tahminler.join(', ')}`);
       }
     });
-    collector.on('end', () => {});
   }
   
   else if (command === 'bilgiyarisma') {
@@ -419,7 +406,7 @@ client.on('messageCreate', async (message) => {
           collector.stop();
           const tahminler = ['Kedi', 'Köpek', 'Telefon', 'Bilgisayar', 'Araba', 'Pizza', 'Kitap'];
           const tahmin = tahminler[Math.floor(Math.random() * tahminler.length)];
-          const msg = await message.reply(`🤔 Tahminim: **${tahmin}**. Bildim mi? (evet/hayır)`);
+          await message.reply(`🤔 Tahminim: **${tahmin}**. Bildim mi? (evet/hayır)`);
           
           const tahminFilter = m2 => m2.author.id === message.author.id;
           const tahminCollector = message.channel.createMessageCollector({ filter: tahminFilter, time: 30000, max: 1 });
@@ -455,7 +442,6 @@ client.on('messageCreate', async (message) => {
   
   else if (command === 'kedi') {
     try {
-      const fetch = require('node-fetch');
       const res = await fetch('https://api.thecatapi.com/v1/images/search');
       const data = await res.json();
       await message.reply({ content: '🐱 **Rastgele Kedi**', files: [data[0].url] });
@@ -466,7 +452,6 @@ client.on('messageCreate', async (message) => {
   
   else if (command === 'köpek') {
     try {
-      const fetch = require('node-fetch');
       const res = await fetch('https://dog.ceo/api/breeds/image/random');
       const data = await res.json();
       await message.reply({ content: '🐶 **Rastgele Köpek**', files: [data.message] });
