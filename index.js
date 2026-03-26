@@ -113,7 +113,7 @@ client.on('messageCreate', async (message) => {
     await message.reply(`👋 **${message.author.username}** AFK modundan çıktı. (Sebep: ${sebep})`);
   }
   
-  // Etiketlenen AFK kontrolü
+  // Etiketlenen AFK kontrolü (BU KISIM DOĞRU YERDE!)
   if (message.mentions.users.size > 0) {
     for (const [id, user] of message.mentions.users) {
       if (afkKullanicilar.has(id)) {
