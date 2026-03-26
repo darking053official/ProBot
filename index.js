@@ -13,7 +13,7 @@ const client = new Client({
 });
 
 const BOT_TOKEN = 'a802cb78ecf1ec9b4184795b02aea3eb3ef27d6843fa69653a2b013f5af2d6cc';
-const GEMINI_API_KEY = 'AIzaSyAfTgon3vad6OR4vW9KHKxfBswioWcbGQ8';
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 const aiModel = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
